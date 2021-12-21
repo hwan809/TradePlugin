@@ -1,0 +1,8 @@
+name: TradePlugin
+version: '${project.version}'
+main: me.trade.vivace.Main
+authors: [ vivace ]
+description: four network trade plugin
+commands:
+  거래:
+    usage: /거래 <신청|수락|거절>
