@@ -56,6 +56,19 @@ public class TradeCommand implements CommandExecutor {
                 return true;
             }
 
+            for (TradeInventoryManager manager : TradeInventoryHandler.tradeInventory) {
+                if (manager.p1.equals(commandSender) ||
+                        manager.p2.equals(commandSender)) {
+                    logMessage(commandSender, ChatColor.RED + "이미 거래 중인 창이 있습니다.\n"
+                            + ChatColor.GRAY + "/거래 창" + ChatColor.RED + "으로 진행 중인 거래를 끝마쳐주세요.");
+                    return true;
+                } else if (manager.p1.equals(victim) ||
+                        manager.p2.equals(victim)) {
+                    logMessage(commandSender, ChatColor.RED + "이미 다른 유저와 거래 중인 플레이어입니다.\n");
+                    return true;
+                }
+            }
+
             commandSender.sendTitle(ChatColor.GOLD + "[거래]",
                     ChatColor.YELLOW + victim.getName() + ChatColor.WHITE + "님께 거래를 신청하였습니다.",
                     20, 100, 20);
@@ -93,11 +106,11 @@ public class TradeCommand implements CommandExecutor {
             return true;
         }
 
-        if (args.length < 2) {
-            return true;
-        }
-
         if (extraCommmand.equals("수락")) {
+            if (args.length < 2) {
+                return true;
+            }
+
             String inviteCode = args[1];
 
             if (!inviteCodes.containsKey(inviteCode)) {
@@ -118,6 +131,10 @@ public class TradeCommand implements CommandExecutor {
             
             return true;
         } else if (extraCommmand.equals("거절")) {
+            if (args.length < 2) {
+                return true;
+            }
+
             String inviteCode = args[1];
 
             if (!inviteCodes.containsKey(inviteCode)) {
@@ -134,6 +151,18 @@ public class TradeCommand implements CommandExecutor {
 
             inviteCodes.remove(inviteCode);
             
+            return true;
+        } else if (extraCommmand.equals("창")) {
+            for (TradeInventoryManager manager : TradeInventoryHandler.tradeInventory) {
+                if (manager.p1.equals(commandSender) || manager.p2.equals(commandSender)) {
+                    commandSender.closeInventory();
+                    commandSender.openInventory(manager.tradeInventory);
+
+                    return true;
+                }
+            }
+
+            logMessage(commandSender, ChatColor.RED + "거래 중인 플레이어가 없습니다.");
             return true;
         }
 
