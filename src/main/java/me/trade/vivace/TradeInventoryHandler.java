@@ -37,8 +37,10 @@ public class TradeInventoryHandler implements Listener {
         boolean isPlayerP1 = nowTradeInventory.p1.equals(player);
         int slot = event.getSlot();
 
-        if (event.getClickedInventory().getType() == InventoryType.PLAYER
-                && event.getClick() == ClickType.SHIFT_LEFT) {
+        if (event.getClickedInventory().getType() == InventoryType.PLAYER) {
+            if (event.getClick() == ClickType.SHIFT_LEFT) {
+                event.setCancelled(true);
+            }
             return;
         }
 
