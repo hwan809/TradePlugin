@@ -5,7 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -30,11 +32,15 @@ public class TradeInventoryHandler implements Listener {
         }
 
         if (nowTradeInventory == null) return;
-        if (!event.getClickedInventory().getTitle().equals(nowTradeInventory.inventoryName)) return;
 
         Player player = (Player) event.getWhoClicked();
         boolean isPlayerP1 = nowTradeInventory.p1.equals(player);
         int slot = event.getSlot();
+
+        if (event.getClickedInventory().getType() == InventoryType.PLAYER
+                && event.getClick() == ClickType.SHIFT_LEFT) {
+            return;
+        }
 
         if (
                 (isPlayerP1 && TradeInventoryManager.isp1Location(slot)) ||
